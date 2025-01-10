@@ -83,6 +83,12 @@ pub struct RaylibBuilder {
     width: i32,
     height: i32,
     title: String,
+    //Added
+    click_through: bool,
+    always_top: bool,
+    borderless: bool,
+    unfocused: bool,
+    hidden: bool,
 }
 
 /// Creates a `RaylibBuilder` for choosing window options before initialization.
@@ -161,7 +167,29 @@ impl RaylibBuilder {
         self.title = text.to_string();
         self
     }
+    //New
+    pub fn click_through(&mut self) -> &mut Self {
+        self.click_through = true;
+        self
+    }
 
+    pub fn always_top(&mut self) -> &mut Self {
+        self.always_top = true;
+        self
+    }
+
+    pub fn borderless(&mut self) -> &mut Self {
+        self.borderless = true;
+        self
+    }
+    pub fn unfocused(&mut self) -> &mut Self {
+        self.unfocused = true;
+        self
+    }
+    pub fn hidden(&mut self) -> &mut Self {
+        self.hidden = true;
+        self
+    }
     /// Builds and initializes a Raylib window.
     ///
     /// # Panics
@@ -188,7 +216,26 @@ impl RaylibBuilder {
         if self.vsync_hint {
             flags |= FLAG_VSYNC_HINT as u32;
         }
+        if self.click_through {
+            flags |= FLAG_WINDOW_MOUSE_PASSTHROUGH as u32;
+        }
+        if self.always_top {
+            flags |= FLAG_WINDOW_TOPMOST as u32;
+        }
+        if self.borderless {
+            flags |= FLAG_BORDERLESS_WINDOWED_MODE as u32;
+        }
+        if self.unfocused {
+            flags |= FLAG_WINDOW_UNFOCUSED  as u32;
+        }
+        if self.hidden {
+            flags |= FLAG_WINDOW_HIDDEN  as u32;
+        }
+    
+    
 
+
+        
         unsafe {
             ffi::SetConfigFlags(flags as u32);
         }
